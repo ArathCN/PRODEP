@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" href="../static/css/bootstrap.css"/>
+
+	<script th:src="@{/js/jquery.js}" src="../static/js/jquery.js"></script>
+  <script th:src="@{/js/bootstrap.js}" src="../static/js/bootstrap.js"></script>
+  <script th:src="@{/js/admin/admin.js}"></script>
+
+	<title>PRODEP</title>
+</head>
+<body>
+
+  <!-- Modal -->
+  <div class="modal fade" id="mensajeEliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Rechazar documento</h5>
+        </div>
+        <div class="modal-body">
+          <form th:action="@{/admin}" th:method="post">
+            <div class="mb-3">
+              <input id="idRechazar" type="hidden" name="id" value="0">
+              <input type="hidden" name="accion" value="rechazar">
+              <textarea class="form-control" name="comentario" rows="5" cols="30" maxlength="250">Por qué rechazó el documento...</textarea>
+            </div>
+            <button class="btn btn-danger" type="submit">
+              Rechazar
+            </button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="http://localhost/inicio/Prodep">PRODEP</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link active" th_href="@{/}" aria-current="page" href="#">Inicio</a>
+            <a class="nav-link" href="#">Plazas</a>
+            <a class="nav-link" href="#">Becas</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  
+    <div class="col-12">
+      <div class="col-12">
+          <img class="rounded mx-auto d-block" width=100% src="http://localhost/img/headerith.png">
+      </div>
+    </div>
+  
+    <div class="jumbotron">
+      <div class="text-center">
+        <h3 class="display-3">Administración</h3>
+        <p class="lead">Gestionar los documentos presentados.</p>
+        <hr class="my-4">
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="container py-5"> 
+
+      <h1 class="display-6">Documentos por aprobar</h1>
+      <br>
+      <div class="row">
+
+        <div class="alert alert-success alertaUpdate" role="alert" th:if="${#httpServletRequest.getParameter('update') == 'OK'}">
+          ¡Se ha actualizado el documento!
+        </div>
+        <div class="alert alert-danger alertaUpdate" role="alert" th:if="${#httpServletRequest.getParameter('update') == 'ERROR'}">
+          Hubo un error al actualizar el documento.
+        </div>
+
+        <table class="table table-hover"> <!-- Hay que usar thymeleaf para que sea dinamica. -->
+          <thead>
+            <tr>
+              <th scope="col">Maestro</th>
+              <th scope="col">Forma de comprobar</th>
+              <th scope="col">Documento</th>
+
+              <th scope="col">Aprobar</th>
+              <th scope="col">Rechazar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="comp : ${comprobaciones}">
+              <td th:text="${comp.getUsuario().getA_paterno()} + ' ' + ${comp.getUsuario().getA_materno()}">Maestro</td>
+              <td th:text="${comp.getFc().getNombre()}">Forma de comprobar</td>
+              <td><a href="#" th:href="${comp.getDoc_url()}" th:text="${comp.doc_url.replaceAll('.+[\\\\/]', '')}">doc</a></td>
+
+              <td>
+                <form th:action="@{/admin}" th:method="post">
+                  <input type="hidden" name="id" th:value="${comp.getId_comp()}">
+                  <input type="hidden" name="accion" value="aceptar">
+                  <button class="btn" type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                    </svg>
+                  </button>
+                </form>
+              </td>
+
+              <td>
+                <button class="btn btn-rechazar" th:value="${comp.getId_comp()}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <br>
+      <br>
+      <h1 class="display-6">Documentos aprobados</h1>
+      <br>
+
+      <div class="row">
+        <table id="tablaDocsAprob" class="table align-middle"> <!-- Hay que usar thymeleaf para que sea dinamica. -->
+          <thead>
+            <tr>
+              <th scope="col">Maestro</th>
+              <th scope="col">Forma de comprobar</th>
+              <th scope="col">Documento</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="comp : ${comprobacionesAceptadas}">
+              <td th:class="'m m' + ${comp.getUsuario().getId_usuario()}" th:text="${comp.getUsuario().getNombre()} + ' ' + ${comp.getUsuario().getA_paterno()} + ' ' + ${comp.getUsuario().getA_materno()}">Maestro</td>
+              <td th:text="${comp.getFc().getNombre()}">Forma de comprobar</td>
+              <td><a href="#" th:href="${comp.getDoc_url()}" th:text="${comp.doc_url.replaceAll('.+[\\\\/]', '')}">doc</a></td>
+            </tr>
+            <!-- ejemplos -->
+            
+            <tr>
+              <td class="m m00"></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      
+    </div>
+  </div>
+
+	<footer class="bg-secondary text-white">
+    <div class="container-fluid">
+      <div class="row">
+          <div  class="col-md-8">
+            <h6>Proyecto PRODEP</h6>
+            <p>Esta página es un módulo parte de un proyecto por estudiantes de ingenieria en sistemas computacionales del Tecnológico Nacional de México Campus Hermosillo</p>
+          </div>
+          <div class="col-md-4">
+            <h6>Contacto</h6>
+            <p>Minjares Leonardo
+            <br/>leonardodominguez054@gmail.com
+            <br/>+ 662 2 24 77 23
+            </p>
+          </div>
+      </div>
+      <div class="text-center">© 2021 PRODEP. Pagina Creada para el ITH</div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" href="../static/css/bootstrap.css"/>
+
+	<script th:src="@{/js/jquery.js}" src="../static/js/jquery.js"></script>
+  <script th:src="@{/js/bootstrap.js}" src="../static/js/bootstrap.js"></script>
+  <script th:src="@{/js/admin/admin.js}"></script>
+
+	<title>PRODEP</title>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="http://localhost/inicio/Prodep">PRODEP</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link active" th_href="@{/}" aria-current="page" href="#">Inicio</a>
+            <a class="nav-link" href="#">Plazas</a>
+            <a class="nav-link" href="#">Becas</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  
+    <div class="col-12">
+      <div class="col-12">
+          <img class="rounded mx-auto d-block" width=100% src="http://localhost/img/headerith.png">
+      </div>
+    </div>
+  
+    <div class="jumbotron">
+      <div class="text-center">
+        <h3 class="display-3">Maestros</h3>
+        <p class="lead">Gestionar los documentos presentados.</p>
+        <hr class="my-4">
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="container py-5">
+
+      <!-- Botn overview -->
+      <a class="btn btn-outline-primary" th:href="@{/}" role="button">Ver rubros</a>
+      <br><br>
+
+      <h1 class="display-6">Documentos pendientes</h1>
+      
+      <br>
+
+      <div class="row">
+        <table class="table table-hover"> <!-- Hay que usar thymeleaf para que sea dinamica. -->
+          <thead>
+            <tr>
+              <th scope="col">Rubro</th>
+              <th scope="col">Documento</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Revisar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Rubro
+                <span class="small text-muted">Forma de comprobar</span>
+              </td>
+              <td><a href="#">doc</a></td>
+              <td><span class="badge bg-warning">En revisión</span></td>
+              <td><button class="btn btn-primary" type="submit">Revisar</button></td>
+            </tr>
+
+            <tr th:each="comp : ${comprobacionesPendientes}">
+              <td th:text="${comp.getFc().getNombre()}">Forma de comprobar</td>
+              <td><a href="#" th:href="${comp.getDoc_url()}" th:text="${comp.doc_url.replaceAll('.+[\\\\/]', '')}">doc</a></td>
+              <td th:switch="${comp.getEstado()}">
+                <div th:case="1" class="badge bg-warning">En Revisión</div>
+                <div th:case="2" class="badge bg-danger">Rechazado</div>
+                <div th:case="*" class="badge bg-secondary">Error</div>
+              </td>
+              <td><a class="btn btn-primary" th:href="${'/comprobar/' + comp.getFc().getId_fc()}" role="button">Revisar</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <br>
+
+      <h1 class="display-6">Documentos aprobados</h1>
+      
+      <br>
+      <br>
+
+      <div class="row">
+        <table class="table table-hover"> <!-- Hay que usar thymeleaf para que sea dinamica. -->
+          <thead>
+            <tr>
+              <th scope="col">Rubro</th>
+              <th scope="col">Documento</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Revisar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Rubro
+                <span class="small text-muted">Forma de comprobar</span>
+              </td>
+              <td><a href="#">doc</a></td>
+              <td><span class="badge bg-success">Aprobado</span></td>
+              <td><button class="btn btn-primary" type="submit">Revisar</button></td>
+            </tr>
+            <tr th:each="comp : ${comprobacionesAceptadas}">
+              <td th:text="${comp.getFc().getNombre()}">Forma de comprobar</td>
+              <td><a href="#" th:href="${comp.getDoc_url()}" th:text="${comp.doc_url.replaceAll('.+[\\\\/]', '')}">doc</a></td>
+              <td><div class="badge bg-success">Aceptado</div></td>
+              <td><a class="btn btn-primary" th:href="${'/comprobar/' + comp.getFc().getId_fc()}" role="button">Revisar</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+	<footer class="bg-secondary text-white">
+    <div class="container-fluid">
+      <div class="row">
+          <div  class="col-md-8">
+            <h6>Proyecto PRODEP</h6>
+            <p>Esta página es un módulo parte de un proyecto por estudiantes de ingenieria en sistemas computacionales del Tecnológico Nacional de México Campus Hermosillo</p>
+          </div>
+          <div class="col-md-4">
+            <h6>Contacto</h6>
+            <p>Minjares Leonardo
+            <br/>leonardodominguez054@gmail.com
+            <br/>+ 662 2 24 77 23
+            </p>
+          </div>
+      </div>
+      <div class="text-center">© 2021 PRODEP. Pagina Creada para el ITH</div>
+    </div>
+  </footer>
+
+</body>
+</html>

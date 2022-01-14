@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" href="../static/css/bootstrap.css"/>
+
+	<script th:src="@{/js/jquery.js}" src="../static/js/jquery.js"></script>
+	<script th:src="@{/js/bootstrap.js}" src="../static/js/bootstrap.js"></script>
+
+	<title>PRODEP</title>
+</head>
+<body>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="http://localhost/inicio/Prodep">PRODEP</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" th:href="@{/}" aria-current="page" href="#">Inicio</a>
+        <a class="nav-link" href="#">Plazas</a>
+        <a class="nav-link" href="#">Becas</a>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="col-12">
+        <!---------HEADER>-------------->
+        <div class="col-12">
+            <img class="rounded mx-auto d-block" width=100% src="http://localhost/img/headerith.png">
+        </div>
+    </div>
+<div class="jumbotron text-center">
+  <h1 th:text="${nomrubro}" class="display-4">Rubro</h1>
+  <p class="lead">Consulta de documentos</p>
+  <hr class="my-4">
+  <p>Nota: Sólo se necesita un documento para comprobar el rubro</p>
+</div>
+
+<div id="FormUl" class="container">
+<h4>Tipos de Nombramientos</h4> 
+<p>Director</p>
+<p>Subdirector</p>
+<p>Presidente de Academia</p>
+<p>Secretario de Academia</p>
+<p>Miembros de Consejo Académico</p>
+<p>Coordinador de Posgrado</p>
+<p>Coordinador de Carrera</p>
+<p>Jefe de Proyectos de Vinculación</p>
+<p>Coordinador de Residencias</p>
+<p>Coordinadora Institucional de Tutorías</p>
+<p>Coordinador Institucional de Idiomas</p>
+<p>Representante Institucional PRODEP</p>
+<p>Enlace CONACyT</p>
+<p>Coordinador de CIIE</p>
+<p>Jefe de Departamento Académico</p>
+<p>Jefes de Oficina</p>
+<p>Jefe de Laboratorio o Taller</p>
+<p>Auxiliar de Laboratorio o Taller</p>
+<p>Jefe de Proyectos de Docencia</p>
+<p>Jefe de Proyectos de Investigación</p>
+<p>Coordinador de Proceso de Acreditación de Carreras</p>
+<p>Coordinador de Certificaciones</p>
+<h6>Documento: </h6>
+<p>* Constancia de vigencia del nombramiento expedida por el Director</p>
+<h6>Condiciones: </h6>
+<p>Cumplir con el nombramiento y comprobar 40 horas de labores</p>
+<p>Contar con una gestión en proceso</p>
+<!-- <h4>Tipos de comisiones</h4> 
+<p>Comisiones especiales del TecNM (EDD, o cualquier Secretaría o Dirección del TecNM)</p>
+<p>Comisiones especiales locales (EDD, dictaminadora y mixta de seguridad e higiene)</p>
+<h6>Documento: </h6>
+<p>* Oficio de Comisión firmada por el (la) Director (a) del Plantel y constancia del TECNM</p>
+<h6>Condiciones: </h6>
+<p>Cumplir con el nombramiento y comprobar 40 horas de labores</p>
+<p>Contar con una gestión en proceso</p>
+<h4>Otros cargos</h4>
+<p>Evaluador de Proyectos CONACyT</p>
+<p>Participación como jurado en Eventos Académicos</p>
+<p>Participación en Actividades de Promoción Admisión o Inscripción para nuevo ingreso</p>
+<h6>Documento: </h6>
+<p>* Constancia de la Institución Organizadora y constancia por el (la) Jefe (a) de Departamento Académico</p>
+<h6>Condiciones: </h6>
+<p>Cumplir con el nombramiento y comprobar 40 horas de labores</p>
+<p>Contar con una gestión en proceso</p>-->
+</div>
+<div class="text-center">
+<p class="lead">
+    <a class="btn btn-primary btn-lg" type="buttom" role="button" onclick="document.getElementById('SubirBtn').style.display='block'">Subir Archivo</a>
+  </p> 
+</div>
+  <div id="SubirBtn" class="row" style="display: none;">
+    <div class="offset-xl-3 col-xl-6 py-5">
+      <div class="card">
+        <div class="card-header">Sube tu archivo</div>
+        <div class="card-body">
+          <form class="upload_file">
+            <div class="form-group">
+              <label for="file">Archivo a subir</label>
+              <input type="file" class="form-control form-control-file" name="file" id="file" required>
+            </div>
+			<div class="py-3">
+            <button class="btn btn-primary" type="submit">Subir</button>
+			</div>
+            <div class="wrapper mt-5" style="display: none;">
+              <div class="progress progress_wrapper">
+                <div class="progress-bar progress-bar-striped bg-info progress-bar-animated progress-bar" role="progressbar" style="width: 0%;">0%</div>
+              </div>
+            </div>
+          </form>
+          <div class="wrapper_files"></div>
+        </div>
+      <div class="card-footer text-center">
+      <small class="text-muted">aún en pruebas</small>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+	<footer class="bg-secondary text-white">
+    <div class="container-fluid">
+      <div class="row">
+        <div  class="col-md-8">
+          <h6>Proyecto PRODEP</h6>
+          <p>Esta página es un módulo parte de un proyecto por estudiantes de ingenieria en sistemas computacionales del Tecnológico Nacional de México Campus Hermosillo</p>
+        </div>
+        <div class="col-md-4">
+          <h6>Contacto</h6>
+          <p>Minjares Leonardo
+          <br/>leonardodominguez054@gmail.com
+          <br/>+ 662 2 24 77 23
+          </p>
+          </div>
+          </div>
+          <div class="text-center">© 2021 PRODEP. Pagina Creada para el ITH
+        </div>
+        </div>
+        </footer>
+</body>
+</html>
