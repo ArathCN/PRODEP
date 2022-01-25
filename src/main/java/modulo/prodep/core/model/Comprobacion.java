@@ -11,6 +11,8 @@ import java.util.Date;
 //Las horas son en 24, 
 import java.util.TimeZone;
 
+import org.springframework.web.multipart.MultipartFile;
+
 
 public class Comprobacion {
     public static DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -18,7 +20,9 @@ public class Comprobacion {
     private int id_comp;
     private int id_usuario;
     private int id_fc;
-    private String doc_url;
+    private String doc_name;
+    private String doc_type;
+    private byte[] doc;
     private Date fecha;
     private int estado;
     private Date ultima_revision; //tambien combrobar
@@ -32,12 +36,14 @@ public class Comprobacion {
         this.fc = new Fc();
         Comprobacion.df.setTimeZone(TimeZone.getTimeZone("GMT-7:00"));
     }
-    public Comprobacion(int id_comp, int id_usuario, int id_fc, String doc_url, Date fecha, int estado,
+    public Comprobacion(int id_comp, int id_usuario, int id_fc, String doc_name, String doc_type, byte[] doc, Date fecha, int estado,
             Date ultima_revision, String comentario) {
         this.id_comp = id_comp;
         this.id_usuario = id_usuario;
         this.id_fc = id_fc;
-        this.doc_url = doc_url;
+        this.doc_name = doc_name;
+        this.doc_type = doc_type;
+        this.doc = doc;
         this.fecha = fecha;
         this.estado = estado;
         this.ultima_revision = ultima_revision;
@@ -63,12 +69,6 @@ public class Comprobacion {
     }
     public void setId_fc(int id_fc) {
         this.id_fc = id_fc;
-    }
-    public String getDoc_url() {
-        return doc_url;
-    }
-    public void setDoc_url(String doc_url) {
-        this.doc_url = doc_url;
     }
     public Date getFecha() {
         return fecha;
@@ -106,4 +106,24 @@ public class Comprobacion {
     public void setFc(Fc fc) {
         this.fc = fc;
     }
+    public String getDoc_type() {
+        return doc_type;
+    }
+    public void setDoc_type(String doc_type) {
+        this.doc_type = doc_type;
+    }
+    public byte[] getDoc() {
+        return doc;
+    }
+    public void setDoc(byte[] doc) {
+        this.doc = doc;
+    }
+    public String getDoc_name() {
+        return doc_name;
+    }
+    public void setDoc_name(String doc_name) {
+        this.doc_name = doc_name;
+    }
+    
+
 }

@@ -45,7 +45,7 @@ public class AdminController {
         //System.out.println("res: " + respuestaUpdate);
         ModelAndView modelAndView = new ModelAndView("admin/index");
         List<Comprobacion> comprobaciones = comprobacionRepository.readAllCompleteInfo(DocumentState.EN_REVISION, pageable);
-        List<Comprobacion> comprobacionesAceptadas = comprobacionRepository.readAllCompleteInfo(DocumentState.CUALQUIERA, pageable);
+        List<Comprobacion> comprobacionesAceptadas = comprobacionRepository.readAllCompleteInfo(DocumentState.ACEPTADO, pageable);
         modelAndView.addObject("comprobaciones", comprobaciones);
         modelAndView.addObject("comprobacionesAceptadas", comprobacionesAceptadas);
         return modelAndView;

@@ -15,13 +15,13 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="http://localhost/inicio/Prodep">PRODEP</a>
+        <a class="navbar-brand" href="#" th:href="@{/}">PRODEP</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-link active" th_href="@{/}" aria-current="page" href="#">Inicio</a>
+            <a class="nav-link active" th:href="@{/}" aria-current="page" href="#">Inicio</a>
             <a class="nav-link" href="#">Plazas</a>
             <a class="nav-link" href="#">Becas</a>
           </div>
@@ -66,7 +66,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <!-- <tr>
               <td>
                 Rubro
                 <span class="small text-muted">Forma de comprobar</span>
@@ -74,11 +74,15 @@
               <td><a href="#">doc</a></td>
               <td><span class="badge bg-warning">En revisión</span></td>
               <td><button class="btn btn-primary" type="submit">Revisar</button></td>
-            </tr>
+            </tr> -->
 
             <tr th:each="comp : ${comprobacionesPendientes}">
               <td th:text="${comp.getFc().getNombre()}">Forma de comprobar</td>
-              <td><a href="#" th:href="${comp.getDoc_url()}" th:text="${comp.doc_url.replaceAll('.+[\\\\/]', '')}">doc</a></td>
+              <td>
+                <!-- <a href="#" th:href="${comp.getDoc_url()}" th:text="${comp.doc_url.replaceAll('.+[\\\\/]', '')}">doc</a> -->
+                <a href="#" th:href="@{/documentos/} + ${comp.id_comp}" th:text="${comp.doc_name}" target="_blank">doc</a>
+              </td>
+              
               <td th:switch="${comp.getEstado()}">
                 <div th:case="1" class="badge bg-warning">En Revisión</div>
                 <div th:case="2" class="badge bg-danger">Rechazado</div>
@@ -108,17 +112,20 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <!-- <tr>
               <td>Rubro
                 <span class="small text-muted">Forma de comprobar</span>
               </td>
               <td><a href="#">doc</a></td>
               <td><span class="badge bg-success">Aprobado</span></td>
               <td><button class="btn btn-primary" type="submit">Revisar</button></td>
-            </tr>
+            </tr> -->
             <tr th:each="comp : ${comprobacionesAceptadas}">
               <td th:text="${comp.getFc().getNombre()}">Forma de comprobar</td>
-              <td><a href="#" th:href="${comp.getDoc_url()}" th:text="${comp.doc_url.replaceAll('.+[\\\\/]', '')}">doc</a></td>
+              <td>
+                <!-- <a href="#" th:href="${comp.getDoc_url()}" th:text="${comp.doc_url.replaceAll('.+[\\\\/]', '')}">doc</a> -->
+                <a href="#" th:href="@{/documentos/} + ${comp.id_comp}" th:text="${comp.doc_name}" target="_blank">doc</a>
+              </td>
               <td><div class="badge bg-success">Aceptado</div></td>
               <td><a class="btn btn-primary" th:href="${'/comprobar/' + comp.getFc().getId_fc()}" role="button">Revisar</a></td>
             </tr>

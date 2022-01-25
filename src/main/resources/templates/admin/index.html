@@ -100,7 +100,10 @@
             <tr th:each="comp : ${comprobaciones}">
               <td th:text="${comp.getUsuario().getA_paterno()} + ' ' + ${comp.getUsuario().getA_materno()}">Maestro</td>
               <td th:text="${comp.getFc().getNombre()}">Forma de comprobar</td>
-              <td><a href="#" th:href="${comp.getDoc_url()}" th:text="${comp.doc_url.replaceAll('.+[\\\\/]', '')}">doc</a></td>
+              <td>
+                <!-- <a href="#" th:href="${comp.getDoc_url()}" th:text="${comp.doc_url.replaceAll('.+[\\\\/]', '')}">doc</a> -->
+                <a href="#" th:href="@{/documentos/} + ${comp.id_comp}" th:text="${comp.doc_name}" target="_blank">doc</a>
+              </td>
 
               <td>
                 <form th:action="@{/admin}" th:method="post">
@@ -144,7 +147,10 @@
             <tr th:each="comp : ${comprobacionesAceptadas}">
               <td th:class="'m m' + ${comp.getUsuario().getId_usuario()}" th:text="${comp.getUsuario().getNombre()} + ' ' + ${comp.getUsuario().getA_paterno()} + ' ' + ${comp.getUsuario().getA_materno()}">Maestro</td>
               <td th:text="${comp.getFc().getNombre()}">Forma de comprobar</td>
-              <td><a href="#" th:href="${comp.getDoc_url()}" th:text="${comp.doc_url.replaceAll('.+[\\\\/]', '')}">doc</a></td>
+              <td>
+                <!-- <a href="#" th:href="${comp.getDoc_url()}" th:text="${comp.doc_url.replaceAll('.+[\\\\/]', '')}">doc</a> -->
+                <a href="#" th:href="@{/documentos/} + ${comp.id_comp}" th:text="${comp.doc_name}" target="_blank">doc</a>
+              </td>
             </tr>
             <!-- ejemplos -->
             

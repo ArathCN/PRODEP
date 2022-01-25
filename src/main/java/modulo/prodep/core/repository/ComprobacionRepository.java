@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -38,7 +39,9 @@ public class ComprobacionRepository implements CombrobacionRep{
             Map<String, Object> parameters = new HashMap<String, Object>();
             parameters.put("id_usuario", comprobacion.getId_usuario());
             parameters.put("id_fc", comprobacion.getId_fc());
-            parameters.put("doc_url", comprobacion.getDoc_url());
+            parameters.put("doc_name", comprobacion.getDoc_name());
+            parameters.put("doc_type", comprobacion.getDoc_type());
+            parameters.put("doc", comprobacion.getDoc());
             parameters.put("fecha", Comprobacion.df.format(comprobacion.getFecha()));
             parameters.put("estado", comprobacion.getEstado());
             parameters.put("ultima_revision", Comprobacion.df.format(comprobacion.getUltima_revision()));
@@ -55,9 +58,16 @@ public class ComprobacionRepository implements CombrobacionRep{
     public boolean update(Comprobacion comprobacion) { //modificar lod e la fehca
         if(comprobacion.getId_comp() > 0){
             int affectedRows = 0;
-            String sql = "UPDATE comprobaciones SET doc_url = ?, estado = ?, ultima_revision= ?, comentario = ? WHERE id_comp = ?";
+            String sql = "UPDATE comprobaciones SET doc_type = ?, doc = ?, estado = ?, ultima_revision= ?, comentario = ? WHERE id_comp = ?";
             try {
-                affectedRows = jdbcTemplate.update(sql, comprobacion.getDoc_url(), comprobacion.getEstado(), Comprobacion.df.format(comprobacion.getUltima_revision()), comprobacion.getComentario(), comprobacion.getId_comp());
+                affectedRows = jdbcTemplate.update(
+                    sql,
+                    comprobacion.getDoc_type(),
+                    new javax.sql.rowset.serial.SerialBlob(comprobacion.getDoc()),
+                    comprobacion.getEstado(),
+                    Comprobacion.df.format(comprobacion.getUltima_revision()),
+                    comprobacion.getComentario(), comprobacion.getId_comp()
+                );
             } catch (Exception e) {
                 return false;
             }
@@ -113,7 +123,13 @@ public class ComprobacionRepository implements CombrobacionRep{
     public Comprobacion readById(int id) {
         String sql = "SELECT * FROM comprobaciones WHERE id_comp = ?;";
         Object[] params = new Object[] {id};
-        return jdbcTemplate.queryForObject(sql, params, new int[] {java.sql.Types.INTEGER}, new ComprobacionMapper());
+        Comprobacion comprobacion;
+        try{
+            comprobacion = jdbcTemplate.queryForObject(sql, params, new int[] {java.sql.Types.INTEGER}, new ComprobacionMapper());
+        }catch(DataAccessException e){
+            comprobacion = null;
+        }
+        return comprobacion;
     }
 
     @Override
@@ -124,7 +140,7 @@ public class ComprobacionRepository implements CombrobacionRep{
         //estado -> 0 (todos)
         //String sqlFcs = "SELECT distinct comprobaciones.id_fc, fc.id_rubro, fc.nombre, fc.descripcion FROM comprobaciones INNER JOIN fc ON comprobaciones.id_fc = fc.id_fc group by comprobaciones.id_fc";
         //String sqlUsuario = "select distinct comprobaciones.id_usuario, usuario.nombre, usuario.a_paterno, usuario.a_materno, usuario.permiso from comprobaciones inner join usuario on comprobaciones.id_usuario = usuario.id_usuario";
-        String sql = "SELECT C.id_comp, C.id_usuario, U.nombre, U.a_paterno, U.a_materno, U.permiso, C.id_fc, F.id_rubro, F.nombre, F.descripcion, C.doc_url, C.fecha, C.estado, C.ultima_revision, C.comentario " +
+        String sql = "SELECT C.id_comp, C.id_usuario, U.nombre, U.a_paterno, U.a_materno, U.permiso, C.id_fc, F.id_rubro, F.nombre AS 'nombre_fc', F.descripcion, C.doc_name, C.doc_type, C.doc, C.fecha, C.estado, C.ultima_revision, C.comentario " +
         "FROM comprobaciones AS C " +
         "INNER JOIN fc AS F ON C.id_fc = F.id_fc " +
         "INNER JOIN usuario AS U on C.id_usuario = U.id_usuario ";
@@ -144,7 +160,7 @@ public class ComprobacionRepository implements CombrobacionRep{
 
     @Override
     public List<Comprobacion> readByUser (int id_usuario){
-        String sql = "SELECT C.id_comp, C.id_usuario, U.nombre, U.a_paterno, U.a_materno, U.permiso, C.id_fc, F.id_rubro, F.nombre, F.descripcion, C.doc_url, C.fecha, C.estado, C.ultima_revision, C.comentario " +
+        String sql = "SELECT C.id_comp, C.id_usuario, U.nombre, U.a_paterno, U.a_materno, U.permiso, C.id_fc, F.id_rubro, F.nombre AS 'nombre_fc', F.descripcion, C.doc_name, C.doc_type, C.doc, C.fecha, C.estado, C.ultima_revision, C.comentario " +
         "FROM comprobaciones AS C " +
         "INNER JOIN fc AS F ON C.id_fc = F.id_fc " +
         "INNER JOIN usuario AS U on C.id_usuario = U.id_usuario " +

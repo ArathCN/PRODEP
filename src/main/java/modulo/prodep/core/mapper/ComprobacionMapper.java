@@ -3,9 +3,7 @@ package modulo.prodep.core.mapper;
 import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import org.springframework.jdbc.core.RowMapper;
 import modulo.prodep.core.model.Comprobacion;
@@ -18,7 +16,9 @@ public class ComprobacionMapper implements RowMapper<Comprobacion>{
         comprobacion.setId_comp(rs.getInt("id_comp"));
         comprobacion.setId_usuario(rs.getInt("id_usuario"));
         comprobacion.setId_fc(rs.getInt("id_fc"));
-        comprobacion.setDoc_url(rs.getString("doc_url"));
+        comprobacion.setDoc_name(rs.getString("doc_name"));
+        comprobacion.setDoc_type(rs.getString("doc_type"));
+        comprobacion.setDoc(rs.getBlob("doc").getBytes(1, (int)rs.getBlob("doc").length()));
         comprobacion.setEstado(rs.getInt("estado"));
         comprobacion.setComentario(rs.getString("comentario"));
 

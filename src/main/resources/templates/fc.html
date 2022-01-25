@@ -7,25 +7,26 @@
 	<script th:src="@{/js/jquery.js}" src="../static/js/jquery.js"></script>
   <script th:src="@{/js/bootstrap.js}" src="../static/js/bootstrap.js"></script>
   <script th:src="@{/js/maestro/alerta.js}"></script>
+  <script th:src="@{/js/maestro/selects.js}"></script>
 
 	<title>PRODEP</title>
 </head>
 <body>
-		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="http://localhost/inicio/Prodep">PRODEP</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link active" th:href="@{/}" aria-current="page" href="#">Inicio</a>
-        <a class="nav-link" href="#">Plazas</a>
-        <a class="nav-link" href="#">Becas</a>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#" th:href="@{/}">PRODEP</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link active" th:href="@{/}" aria-current="page" href="#">Inicio</a>
+          <a class="nav-link" href="#">Plazas</a>
+          <a class="nav-link" href="#">Becas</a>
+        </div>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
 <div class="col-12">
         <!---------HEADER>-------------->
         <div class="col-12">
@@ -40,7 +41,7 @@
   <div class="alert alert-success alertaSubida" role="alert" th:if="${#httpServletRequest.getParameter('subida') == 'OK'}">
     ¡Se ha subido el documento con éxito!
   </div>
-  <div class="alert alert-danger alertaSubida" role="alert" th:if="${#httpServletRequest.getParameter('subida') == 'ERROR'}">
+  <div class="alert alert-danger alertaSubida" role="alert" th:text="${#httpServletRequest.getParameter('mensajeError')}" th:if="${#httpServletRequest.getParameter('subida') == 'ERROR'}">
     Hubo un error al subir el documento.
   </div>
 
@@ -48,7 +49,7 @@
   <div class="alert alert-success alertaSubida" role="alert" th:if="${#httpServletRequest.getParameter('delete') == 'OK'}">
     Se ha eliminado el archivo con éxito.
   </div>
-  <div class="alert alert-danger alertaSubida" role="alert" th:text="${mensajeError}" th:if="${#httpServletRequest.getParameter('delete') == 'ERROR'}">
+  <div class="alert alert-danger alertaSubida" role="alert" th:text="${#httpServletRequest.getParameter('mensajeError')}" th:if="${#httpServletRequest.getParameter('delete') == 'ERROR'}">
     Se ha eliminado el archivo con éxito.
   </div>
 
@@ -71,7 +72,8 @@
   </div>
 
   <br>
-  
+
+
   <div class="card text-center" th:if="${comprobacion != null}">
     <div class="card-header">
       <h4>
@@ -95,7 +97,7 @@
               <tr>
                 <td th:text="${#dates.format(comprobacion.fecha, 'dd-MM-yyyy HH:mm')}">20/11/2021 21:30</td>
                 <td>
-                  <a href="#" th:href="${comprobacion.doc_url}" th:text="${comprobacion.doc_url.replaceAll('.+[\\\\/]', '')}">doc</a>
+                  <a href="#" th:href="@{/documentos/} + ${comprobacion.id_comp}" th:text="${comprobacion.doc_name}" target="_blank">doc</a>
                 </td>
                 <td th:switch="${comprobacion.estado}">
                   <div th:case="1" class="badge bg-warning">En Revisión</div>
@@ -113,7 +115,6 @@
       </p>
       <form th:action="@{/comprobar/delete}" th:method="post" th:if="${comprobacion.estado != 3}">
         <input type="hidden" name="id_comp" th:value="${comprobacion.id_comp}">
-        <input type="hidden" name="url" th:value="${comprobacion.doc_url}">
         <input type="hidden" name="id_fc" th:value="${id}">
         <button class="btn btn-danger" type="submit">Cancelar subida</button>
       </form>
@@ -138,6 +139,12 @@
               <div class="form-group">
                 <label for="file">Archivo a subir</label>
                 <input type="file" class="form-control form-control-file" name="file" required>
+
+                <br>
+                <!-- <select id="selectPeriodo" class="form-select form-select-sm" aria-label=".form-select-sm example">
+                  <option selected>Selecciona un período</option>
+                </select>
+                <br> -->
                 <input type="hidden" class="form-control sr-only" name="id_fc" th:value="${id}" readonly required>
               </div>
               <div class="py-3">
